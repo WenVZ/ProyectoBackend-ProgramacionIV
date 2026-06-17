@@ -15,7 +15,8 @@ namespace ProyectoBackend.Services
             _context = context;
         }
 
-        // Obtener todos los eventos activos
+        // Obtener todos los eventos activos en este momento
+
         public async Task<List<Evento>> ObtenerTodosAsync()
         {
             return await _context.Eventos.ToListAsync();
@@ -27,6 +28,8 @@ namespace ProyectoBackend.Services
             return await _context.Eventos.FindAsync(id);
         }
 
+
+
         // Crear un nuevo evento (Solo Admin)
         public async Task<Evento> CrearAsync(Evento evento)
         {
@@ -35,7 +38,9 @@ namespace ProyectoBackend.Services
             return evento;
         }
 
-        // Actualizar datos de un evento (Solo Admin)
+
+
+        // Actualizar datos de un evento (Solo Admin puede)
         public async Task<bool> ActualizarAsync(int id, Evento datosActualizados)
         {
             var evento = await _context.Eventos.FindAsync(id);
@@ -51,6 +56,8 @@ namespace ProyectoBackend.Services
             await _context.SaveChangesAsync();
             return true;
         }
+
+
 
         // Eliminar un evento (Solo Admin)
         public async Task<bool> EliminarAsync(int id)

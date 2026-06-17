@@ -34,7 +34,7 @@ namespace ProyectoBackend.Controllers
             return Ok(evento);
         }
 
-        // POST: api/eventos (SOLO ADMIN)
+        // POST: api/eventos (SOLO ADMINISTRADOR)
         [HttpPost]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Create([FromBody] Evento evento)
