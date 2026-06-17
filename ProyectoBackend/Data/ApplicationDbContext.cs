@@ -14,9 +14,7 @@ namespace ProyectoBackend.Data
         public DbSet<Usuario> Usuarios { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
         public DbSet<Emprendimiento> Emprendimientos { get; set; }
-
         public DbSet<Incidencia> Incidencias { get; set; }
-
         public DbSet<Evento> Eventos { get; set; }
     }
 
