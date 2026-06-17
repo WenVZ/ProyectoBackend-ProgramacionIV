@@ -24,9 +24,9 @@ namespace ProyectoBackend.Services
         {
             var usuario = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Correo == correo);
-
             if (usuario == null) return null;
 
+            // compara el password ingresado contra el hash guardado 
             bool passwordValida = BC.Verify(password, usuario.PasswordHash);
             if (!passwordValida) return null;
 
@@ -42,7 +42,7 @@ namespace ProyectoBackend.Services
             {
                 Nombre = nombre,
                 Correo = correo,
-                PasswordHash = BC.HashPassword(password),
+                PasswordHash = BC.HashPassword(password), // no se guarda el password en texto plano
                 Rol = "usuario",
                 FechaRegistro = DateTime.UtcNow
             };
@@ -54,12 +54,14 @@ namespace ProyectoBackend.Services
 
         private string GenerarToken(string correo, string rol)
         {
+            // Claims: info que va dentro del token, para identificar al usuario sin consultar la BD
             var claims = new[]
             {
                 new Claim(ClaimTypes.Email, correo),
                 new Claim(ClaimTypes.Role, rol),
             };
 
+            // Clave secreta usada para firmar el token 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
 
@@ -67,11 +69,11 @@ namespace ProyectoBackend.Services
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(8),
+                expires: DateTime.UtcNow.AddHours(8), // tiempo de vida del token
                 signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256)
             );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return new JwtSecurityTokenHandler().WriteToken(token); // serializa el token a string
         }
     }
 }

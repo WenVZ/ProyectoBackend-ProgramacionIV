@@ -8,7 +8,8 @@ namespace ProyectoBackend.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthController : ControllerBase
+    public class AuthController : 
+        ControllerBase
     {
         private readonly IAuthenticationService _authService;
 
@@ -17,6 +18,8 @@ namespace ProyectoBackend.Controllers
             _authService = authService;
         }
 
+
+        //inicio de sesion
         [HttpPost("login")]
         public async Task<IActionResult> Login(UserDTO dto)
         {
@@ -28,6 +31,8 @@ namespace ProyectoBackend.Controllers
             return Ok(new { token });
         }
 
+
+        //registro
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
