@@ -59,6 +59,7 @@ namespace ProyectoBackend.Services
         }
 
         // Eliminar incidencia
+        //mas adelante solo el admin
         public async Task<bool> EliminarAsync(int id)
         {
             var incidencia = await _context.Incidencias.FindAsync(id);

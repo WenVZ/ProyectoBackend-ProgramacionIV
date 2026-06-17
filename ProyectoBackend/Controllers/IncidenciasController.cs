@@ -45,6 +45,7 @@ namespace ProyectoBackend.Controllers
         }
 
         // PUT: api/incidencias/{id}
+        //SOLO EL ADMINISTRADOR
         [HttpPut("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Update(int id, [FromBody] Incidencia incidencia)
@@ -56,6 +57,8 @@ namespace ProyectoBackend.Controllers
         }
 
         // DELETE: api/incidencias/{id}
+        //SOLO EL ADMINISTRADOR
+
         [HttpDelete("{id}")]
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)

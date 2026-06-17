@@ -1,5 +1,7 @@
 ﻿namespace ProyectoBackend.Entities
 {
+
+   
     public class Incidencia
     {
         public int Id { get; set; }

@@ -11,7 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 
-// Swagger con JWT
+
 builder.Services.AddSwaggerGen(c =>
 {
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -23,7 +23,6 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Description = "Escribe: Bearer {tu token}"
     });
-
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
@@ -40,29 +39,34 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// Base de datos
+// Conexion a la base de datos
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Servicios
 builder.Services.AddScoped<EmprendimientoService>();
 builder.Services.AddScoped<EventoService>();
 builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
 builder.Services.AddScoped<IncidenciaService>();
 builder.Services.AddScoped<ReservaService>();
 
-// JWT
+// ---- JWT ----
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
+        //reglas para aceptar o rechazar un token
         options.TokenValidationParameters = new TokenValidationParameters
         {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
+            ValidateIssuer = true,         // revisa que el token venga de tu propia API
+            ValidateAudience = true,       // revisa que el token sea PARA tu propia API
+            ValidateLifetime = true,       // revisa que el token no este vencido
+            ValidateIssuerSigningKey = true, 
+
+            // Estos valores deben ser IGUALES a los que se usaron
+            // cuando se creo el token (en AuthenticationService).
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
+
+           
             IssuerSigningKey = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
         };
@@ -70,7 +74,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-// CORS
+// CORS: le da permiso a frondent de poder
+// hacerle peticiones a esta API s
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
@@ -89,7 +94,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("Frontend");
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 app.Run();
