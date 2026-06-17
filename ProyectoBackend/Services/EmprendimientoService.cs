@@ -15,7 +15,7 @@ namespace ProyectoBackend.Services
             _context = context;
         }
 
-        // Obtener todos los emprendimientos (Público)
+        // Obtener todos los emprendimientos (publico)
         public async Task<List<Emprendimiento>> ObtenerTodosAsync()
         {
             return await _context.Emprendimientos.ToListAsync();
