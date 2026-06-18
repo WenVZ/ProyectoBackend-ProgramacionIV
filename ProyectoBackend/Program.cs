@@ -79,7 +79,7 @@ builder.Services.AddAuthorization();
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("Frontend", policy =>
-        policy.WithOrigins("http://localhost:5173", "https://moonlit-lokum-5382e2.netlify.app")
+        policy.WithOrigins("http://localhost:5173", "https://friendly-taffy-15f1e0.netlify.app")
               .AllowAnyHeader()
               .AllowAnyMethod());
 });
